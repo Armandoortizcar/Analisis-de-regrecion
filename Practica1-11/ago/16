@@ -1,0 +1,27 @@
+t<-seq(20,100,0.5)
+x<-c(2,3,4)
+x[3] #[]para ver elementos
+x[-3] #[]para ver todos los elementos menos alguno específico
+plot(y,z)
+help(plot)
+require() #bajar paquetes precargados en r
+library() #bajar paquetes precargados en r
+install.packages("foreign") #bajas paquetes de la red
+?sample(10000,35)
+##vamos a crear una pequeña base de datos
+## 4 variables: nombre, edad,sexo,educacion
+nombre <- c("sergio","alan","betzabeth","judith","rodrigo","eric","diego","angel")
+edad <- c(36,20,23,20,21,21,22,21)
+sexo<-c("hombre","hombre","mujer","mujer","hombre","hombre","hombre","hombre")
+teduca<-c("publica","publica","publica","publica","privada","publica","publica","publica")
+##generamos matriz con los datos
+base <- matrix(edad,nombre,sexo,teduca)
+#genera base dataframe
+base1.1<-data.frame(edad,nombre,sexo,teduca)
+##vamos a utilizar la funcion table
+#se utiliza table para conocer la frecuencia de variables
+table(base1.1$edad)
+table(base1.1$sexo)
+attach(base1.1)
+table(teduca)
+summary(base1.1$sexo)
