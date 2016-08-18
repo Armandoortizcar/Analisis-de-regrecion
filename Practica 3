@@ -1,0 +1,104 @@
+#rm(list=ls()) función para borrar el ambiente de trabajo
+#CTRL + L limpia la consola
+#definir el directorio raiz de las bases de datos
+setwd("C://Users//SALA-C//Desktop")
+require(foreign)
+#cargar la base en una variable
+sociodem<-read.dbf("C://Users//SALA-C//Desktop//Regresión//SDEMT215.dbf")
+SDEMT215<-data.frame(read.dbf("C://Users//SALA-C//Desktop//Regresión//SDEMT215.dbf"))
+
+
+#1.FRECUENCIAS
+
+
+#1.1 Frecuencias con datos muestrales (sin ponderar)
+#método 1
+view(SDEMT215)
+install.packages("questionr")
+require(questionr)
+wtd.table(SDEMT215$POS_OCU)
+#wtd.table muestra las frecuencias
+wtd.table(SDEMT215$POS_OCU,na.show=TRUE)
+#en la línea anterior muestra los valores perdidos
+
+#1.2 Frecuencias con datos ponderados
+wtd.table(SDEMT215$POS_OCU,weights=SDEMT215$FAC,na.show = TRUE)
+
+#2.1 Tabulados con datos muestrales (sin ponderar)
+#método 1
+wtd.table(SDEMT215$SEX,SDEMT215$POS_OCU)
+#hace un cuadro que relaciona las variables
+
+#2.2 Tabulados con datos ponderados
+wtd.table(SDEMT215$SEX,SDEMT215$POS_OCU,weights=SDEMT215$FAC)
+
+##ejercicio 
+#1) obtener la frecuencia de la variable clase1 (muestral)
+#2) obtener el tabulado de entidad y sexo ( a)muestral y  b)ponderado)
+
+#1)
+wtd.table(SDEMT215$CLASE1)
+
+#2.a)
+wtd.table(SDEMT215$ENT,SDEMT215$SEX)
+
+#2.b)
+wtd.table(SDEMT215$ENT,SDEMT215$SEX,weights = SDEMT215$FAC)
+
+#3.1 Etiquetar en otra variable
+SDEMT215$SEXO<- factor(SDEMT215$SEX,levels=c(1,2), labels = c("Hombre","Mujer"))
+wtd.table(SDEMT215$SEXO)
+
+#3.2 Etiquetar en la misma variable
+SDEMT215$POS_OCU<-factor(SDEMT215$POS_OCU,levels=c(1,2,3,4,5),labels=c("Subordinados y remunerados","Empleadores","Cuenta propia", "Sin pago","NE"))
+wtd.table(SDEMT215$POS_OCU)
+
+#3.3 Tabulado de las variables etiquedas
+wtd.table(SDEMT215$POS_OCU,SDEMT215$SEXO,weights=SDEMT215$FAC)
+
+#4. Recodificar dame todos los variables entre rangos con condiciones
+#BASE$VARIABLE.NUEVA[as.numeric(BASE$VARIABLE EXISTENTE)>=0 & as.numeric(BASE$VARIABLE EXISTENTE)<=10]<-1]
+#AGRUPA EDADES DE 0 A 10
+#as.numeric CAMBIA DE CARACTER A NUMERO
+
+
+sociodem$EDAD11[as.numeric(sociodem$EDA)>=0 & as.numeric(sociodem$EDA)<=10]<-1
+sociodem$EDAD11[as.numeric(sociodem$EDA)>=11 & as.numeric(sociodem$EDA)<=20]<-2
+sociodem$EDAD11[as.numeric(sociodem$EDA)>=21 & as.numeric(sociodem$EDA)<=30]<-3
+sociodem$EDAD11[as.numeric(sociodem$EDA)>=31 & as.numeric(sociodem$EDA)<=40]<-4
+sociodem$EDAD11[as.numeric(sociodem$EDA)>=41]<-5
+#lista de variables de mi base
+ls(SDEMT215)
+#VER LAS CATEGORIAS FORMADAS
+table(sociodem$EDAD11)
+#VER LA CLASE DE LA VARIABLE
+class(sociodem$ENT)
+#CONVERTIR O CAMBIAR CLASE
+sociodem$ENT<-as.character(as.numeric(sociodem$ENT))
+
+#METODO 3
+sociodem$EDAD111 <- ifelse(as.numeric(sociodem$EDA)>=0 & as.numeric(sociodem$EDA) <=10,1,
+                          ifelse(as.numeric(sociodem$EDA) >= 11 &as.numeric(sociodem$EDA)<=20,2, 
+                          ifelse(as.numeric(sociodem$EDA) >= 21 & as.numeric(sociodem$EDA)<=30,3,
+                          ifelse(as.numeric(sociodem$EDA) >= 31 & as.numeric(sociodem$EDA)<=40,4,5))))
+                          
+ls(sociodem)  
+table(sociodem$EDAD111)
+
+#4.1 recodificacion de variables tipo caracter
+#CUANDO ES TIPO CARACTER USAMOS COMILLAS
+
+class(sociodem$R_DEF)
+sociodem$VALIDO[as.character(sociodem$R_DEF)=="00"]<-"entrevistacompleta"
+sociodem$VALIDO[as.character(sociodem$R_DEF)!="00"]<-"entrevista incompleta"
+wtd.table(sociodem$VALIDO)
+#########################################################################################################################
+###5subconjunto datos0000000000000
+#5.1selecciona variables de interes
+#metodo 1
+var<-c("R_DEF", "LOC","MUN", "C_RES")
+newdata <- sociodem[,var]
+##selecionar casos u observaciones
+## funcion subset()
+help("subset")
+mujer<- subset()
