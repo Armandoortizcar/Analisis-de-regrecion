@@ -1,0 +1,24 @@
+esta<-c(1.2,1.23,1.19,1.32,1.28,1.22,1.17,1.29,1.33,1.15)
+eco<-c(110,130,108,167,156,115,104,138,170,107)
+#queremos comprobar que entre mayor ingreso mayor esatura
+#graficar varibles## primero variable independiente y luyego dep
+plot(eco,esta,pch=10,xlab="ingreso economico",ylab="estura",main="grafico disp",col="red")
+#ver el grafico para ve si podemos ajustar un recta
+#cov argumentos:
+#1)var dep
+#2)var indep  
+cor(eco,esta,method ="pearson")
+#prueba de hipotesis Ho=r=0
+#hipotesis alternativa H1=r=!0
+cor.test(esta,eco,method="pearson")
+#si p value es menor a .05 rechazamos la hipotesis nula
+#apliucamos modelo LM=lineal model
+mod1<-lm(esta~eco)
+summary(mod1)
+#pr(>|t|) menos de .05 Que significativos son
+#los residuales nos generan las diferncias entre los valores ajustados y los reales
+#y vemos si eñ coef es significativo
+abline(mod1)#grafica modelo de dispercion
+esta=0.9323692+0.0023420 eco
+names(mod1)
+
