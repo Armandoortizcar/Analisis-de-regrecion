@@ -1,0 +1,49 @@
+esta<-c(1.2,1.23,1.19,1.32,1.28,1.22,1.17,1.29,1.33,1.15)
+eco<-c(110,130,108,167,156,115,104,138,170,107)
+#queremos comprobar que entre mayor ingreso mayor esatura
+#graficar varibles## primero variable independiente y luyego dep
+plot(eco,esta,pch=10,xlab="ingreso economico",ylab="estura",main="grafico disp",col="red")
+#ver el grafico para ve si podemos ajustar un recta
+#cov argumentos:
+#1)var dep
+#2)var indep  
+cor(eco,esta,method ="pearson")
+#prueba de hipotesis Ho=r=0
+#hipotesis alternativa H1=r=!0
+cor.test(esta,eco,method="pearson")
+#si p value es menor a .05 rechazamos la hipotesis nula
+#apliucamos modelo LM=lineal model
+mod1<-lm(esta~eco)
+summary(mod1)
+#pr(>|t|) menos de .05 Que significativos son
+#los residuales nos generan las diferncias entre los valores ajustados y los reales
+#y vemos si eñ coef es significativo
+abline(mod1)#grafica modelo de dispercion
+esta=0.9323692+0.0023420 eco
+names(mod1)
+
+#ver resultados del modelo
+summary(mod1)$coeficientes
+#los valores de p value son menores a .05
+#1)la relacion lineal enre variables es positiva
+#2)por cada peso que aumenrta el padre o madre aumenta de estatura .0023
+#3)el error estandar residual es 0.0198 este valor permite medir la calidad del modelo
+#con este generamos los intervalos de confianza, los intervalos nos poermite completar la info sobre las estimaciones 
+confint(mod1,level=.95)
+#con prob de 95% de ocnfianza b0 se encuentra en el intervalo (0.854212270 ,1.010526206)
+#y B1 entre  (0.001753408, 0.002930589)
+######BONDADE DE AJUSTE#####
+# con esta verificamos la calidad edel modelo al interpretar la vcar indep para eso usamos la tabla nova
+anova(mod1)
+#la variavilidad explicada del modelo es 0.033022 =SSM
+#SE revisa SSR= .0031
+#REVISANDO los valores del sumary estadistico
+#F value es mayor 1 y P value menos a .05
+#Se rechaza la h0: F=1 y se puede etablecer un modelo
+########revisar R2 multiple
+#alrededor del 91% de la variavilidad de la estatura es explicada por la recta ajustada
+####################################supuestos#######################
+base1<-data.frame(eco,esta)
+base1$fitted.mod1<-fitted(mod1)
+base1$residuals.mod1<-residuals(mod1)
+base1$rstudent.mod1<-rstudent(mod1)
