@@ -1,0 +1,53 @@
+capa<-c(4330,5500,5500,4700,5200,5500,4700,5500,5800,5000) #inde(x2)
+calidad<-c(2,3,4,3,4,4,4,5,5,5) #inde(x1)
+precio<-c(190,219,249,249,250,340,289,395,439,525) #dep(y)
+plot(capa, precio, pch=9, xlab="capa", ylab="precio", main="grafico de disp", col="blue")
+cor(precio, calidad, method = "pearson")
+cor.test(precio, calidad, method = "pearson")
+##seleccionar al mejor subconjunto de var independientes 
+#tenemos 2 var independiantes calidad y precio por lo que se propone comparar 3 modelos 
+#aplicar el principio de parsimonia , conocer las var inde inecesarias
+#evitar multicolinealindad, es decir que se tienen muchas var intentando explicar en modelo
+#modelos:
+#1)precio~cantidad
+#2)precio~calidad
+#3)precio~calidad+cantidad
+########¿como seleccionar el mejor modelo?
+#Criterio de informacion de Arkaike (AIC)
+#el problema de utilizar r^2 para comparar modelos es que al introducir nuevas variables , esta 
+#medida siempre crece
+#utilizamos el AIC , una medida de ajuste que penaliza el modelo por tener mas variables 
+#definido por :
+#AIC=(n)(log(SCR/n))+2k
+#SCR=suma de los cuadrados residuales
+#n=numero de casos del moedlo 
+#k=numero de var indep
+#el problema es que el unico criterio del AIC es que si el AIC es mayor el odelo es peor
+#si el AIC es menor el modelo es mejor, buscamos un AIC mas pequeño
+###el metodo mas recomendadpo es el Step by step, para R se utiliza la funcion step()
+##adentro del modelo step by step hay 3 modaldiades
+#1)forward: parte del coeficiente Bo y de ahi va porobando var indep para ver cuel es el que mas aporta al modelo 
+#2)backward:R empieza con todas las var indep y estudia sei el Aic
+#3)both: empieza como forward la dif es que realiza test para conocer el var indep menos util 
+# el mas recomendado es backward pq tiene un efecto represor que permite 
+#probar cuanbdo una var tiene influencia solo si otra var s mantiene constante 
+### 
+moch<-data.frame(precio,capa,calidad)
+cor(moch,use="everything",method="pearson")
+mod1<-lm(precio ~capa+calidad,data=moch)
+summary(mod1)
+
+step(mod1,direction = "backward")
+#se analizo 2 modelos
+#1) Start:  AIC=83.9
+#precio ~ capa + calidad
+#y
+#2) Step:  AIC=83.51
+#precio ~ calidad
+###### ahora probamos lo demas 
+step(mod1,direction = "both")
+step(mod1,direction = "forward")
+#este modelo solo muestra el moelo completo pq inicia haciendo pruebas con el modelo
+#modelo nulo y solo dja el modelo completo pq es el que mayor AIC muestra
+
+#nos quedamos con el mejor AIC que es el modelo de precio~calidad
