@@ -8,13 +8,67 @@ x3<- c(10.8,9.4,7.2,8.5,9.4,9.9,8,9.1,8.7,9.2,9.4,7.6,8.2)
 # 3) comparen modelos ccon backward y analicen el modelo qyue genere la funcion step
 #4)realizar prueba de 3 supuestos (kolmogorov-smirnof,breush-pagan, durin- watson)
 
-#######1)
+#######0)
 plot(model, pch=9, main="grafico de disp", col="blue")
+plot(model)
 base<-data.frame(y,x1,x2,x3)
 cor(base, method = "pearson")
 cor(base,use="everything",method="pearson")
-model<-lm(y ~x1+x2+x3,data=base)
+plot(base, pch=12, main="gráfica de dispersión")
+#######1)
+model<-lm(y~x1+x2+x3,data=base)
 summary(model)
-Adjusted R-squared:  0.8825 
-F-statistic: 31.04 
-p-value: 4.465e-05
+#Adjusted R-squared:  0.8825 
+#F-statistic: 31.04 
+#p-value: 4.465e-05
+   y1=39.1767+1.0166*x1-1.8608*x2 -0.3461*x3
+#####2)
+anova(model)   
+Analysis of Variance Table
+
+#Response: y
+#Df  Sum Sq Mean Sq F value    Pr(>F)    
+#x1         1 187.567 187.567 43.7131 9.796e-05 ***
+#x2         1 210.594 210.594 49.0797 6.285e-05 ***
+#x3         1   1.353   1.353  0.3152    0.5882    
+#Residuals  9  38.618   4.291  
+#para x3 el valor de f es menor a uno y el valor de p es mayor a .05 por lo que no esta bien 
+#planteado el modelo
+
+####3)
+step(model, direction = "backward")
+step(model, direction="both")
+#buscamos el AIC mas pequeño que es
+#Step:  AIC=20.6
+# ---->     y ~ x1 + x2
+#Coefficients:
+#(Intercept)        x1           x2  
+#   36.089        1.031       -1.869 
+bestmodel<-lm(y~x1+x2,data=base)
+summary(bestmodel)
+#                    y~x1+x2+x3             y~x1+x2
+#Adjusted R-squared:  0.8825                0.8905 
+#F-statistic:         31.04                  49.81
+#p-value:            4.465e-05              6.319e-06
+base2<-data.frame(y,x1,x2)
+cor(base2,method = "pearson")
+anova(bestmodel)
+#####4)
+base2$ajus<-fitted(bestmodel)
+base2$resi<-residuals(bestmodel)
+base2$rstud<-rstudent(bestmodel)
+#prueba de normalidad
+ks.test(base2$rstud,"pnorm")
+#p-value = 0.5483 mayor a .05
+
+#homodgeneidad de varianzas
+install.packages("lmtest")
+require("lmtest")
+bptest(bestmodel, studentize = FALSE, data = base2)
+#p-value = 0.394
+#como p value es mayor a .05 podemos decir que la varianza se comporta de manera constante a lo 
+#largo de la muestra
+
+dwtest(bestmodel, alternative = "two.sided", data = base2)
+#p-value = 0.354
+#aceptamos la H0 de que no existe correlación en tre los residuos con un pvalue superior a .05
