@@ -1,0 +1,8 @@
+#monterrey!!
+#dependiente= INGOCUP
+#independiente= EDAD,SEXO,HRSOCUP,AÑOS ESCOLARIDAD
+########
+#RESTRICCIONES
+#poblacioon ciudad depende equipo
+#sean de 15  a 65 años, ingreso entre 1 a 30000,asalariado o subordinados
+#hacer el modelo sin NA
