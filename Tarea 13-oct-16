@@ -1,3 +1,83 @@
+install.packages("foreign")
+require(foreign) 
+sdemt216<-data.frame(read.dbf("C://Users//Sala-F13.RTIC-13-HP//Desktop//sdemt216.dbf"))
+sdemt216$EDA<-as.numeric(sdemt216$EDA)
+sdemt216$INGOCUP<-as.numeric(sdemt216$INGOCUP)
+sdemt216$SEX<-as.numeric(sdemt216$SEX)
+sdemt216$HRSOCUP<-as.numeric(sdemt216$HRSOCUP)
+sdemt216$ANIOS_ESC<-as.numeric(sdemt216$ANIOS_ESC)
+base1<-subset(sdemt216,sdemt216$CD_A=="03"&sdemt216$REMUNE2C==1)
+var<-c("INGOCUP","SEX","EDA","HRSOCUP","ANIOS_ESC")
+base2<-base1[,var]
+base3<-subset(base2,base2$INGOCUP>=1&base2$INGOCUP<=3000)
+mtrey<-subset(base3,base3$EDA>=15&base3$EDA<=65)
+
+#APLICANDO LA REGRESIÓN
+
+cor(mtrey,use="everything",method = "pearson")
+modelo<-lm(INGOCUP~SEX+EDA+HRSOCUP+ANIOS_ESC,data=mtrey)
+summary(modelo)
+#Adjusted R-squared:  0.1543 
+#F-statistic: 7.247 on 4 and 133 DF
+#p-value: 2.605e-05
+
+#1.supuesto: varianza constante
+plot(modelo,which=1,pch=4)
+
+#2.Supuesto de normalidad
+plot(modelo,which=2,pch=4)
+
+#3.Tercer supuesto
+#Los residuos están estandarizados por sus desviaciones estándar estimadas.
+plot(modelo,which=3,pch=4)
+#Se presenta una gráfica sin patrón observable
+#4. supuesto
+plot(modelo,which=5,pch=4)
+
+modelo$ajustados<-fitted(modelo)#aqui añadimos una variable que se llama ajustados
+modelo$res<-residuals(modelo)
+modelo$rstud<-rstudent(modelo)
+########################################################################################################3
+install.packages("lmtest")
+require(lmtest)#Prueba de normalidad
+ks.test(modelo$rstud,"pnorm")
+#Prueba de homogeneidad de varianzas
+bptest(modelo,studentize = FALSE,data=modelo)
+#Prueba de autocorrelación
+dwtest(modelo,alternative="two.sided",data=modelo)
+install.packages("car")
+require(car)
+outlierTest(modelo) 
+influencePlot(modelo)
+#############################################################################################################
+install.packages("faraway")
+require(faraway)
+cooks.distance(modelo)
+dc<-cooks.distance(modelo)
+halfnorm(dc,3, etiqueta)
+##################################################################################################################
+step(modelo,direction="backward")
+modelonuevo<-lm(mtrey$INGOCUP~mtrey$SEX+mtrey$HRSOCUP)
+summary(modelonuevo)
+
+anova(modelonuevo)
+summary(modelonuevo)
+################################################################################################################
+#Si queremos predecir el valor de INGOCUP
+inter<-seq(min(mtrey$INGOCUP),max(mtrey$INGOCUP), length=length(mtrey$INGOCUP)) 
+bolpred<-data.frame(SEX=2, HRSOCUP=35,uso=inter) 
+pred<-predict(modelonuevo,bolpred,interval= "prediction",se.fit=TRUE, data=mtrey) 
+head(pred$fit) 
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+
 #monterreyf!!
 #dependiente= INGOCUP
 #independiente= EDAD,SEXO,HRSOCUP,AÑOS ESCOLARIDAD
@@ -101,6 +181,15 @@ dwtest(modelo,alternative = "two.sided",data = monterreyf)
 #data:  modelo
 #DW = 1.7764, p-value = 1.502e-07
 #alternative hypothesis: true autocorrelation is not 0
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
+##########################################################################################################################
 #monterrey!!
 #dependiente= INGOCUP
 #independiente= EDAD,SEXO,HRSOCUP,AÑOS ESCOLARIDAD
