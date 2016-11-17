@@ -1,0 +1,56 @@
+setwd("C://Users//Sala-C23//Downloads")
+require(foreign)
+solorural<-data.frame(read.spss("solorural.sav"))
+require (questionr)
+#a<- wtd.table(solorural$ent,solorural$)
+
+a<-wtd.table(solorural$sex, weights = solorural$fac_mti,na.show = TRUE)
+table(solorural$sex)
+write.csv(a,"C://Users//Sala-C23//Desktop//solorural.csv")
+b<-wtd.table(solorural$clase2==1,solorural$sex, weights = solorural$fac_mti,na.show = TRUE)
+table(solorural$clase2==1,solorural$sex)
+write.csv(b,"C://Users//Sala-C23//Desktop//solorural2.csv")
+
+ocupados<-subset(solorural,as.numeric(as.character(solorural$clase2))==1)
+ocupados$eda<-as.numeric(as.character(ocupados$eda))
+ocupados$edad<-ifelse(ocupados$eda>=5 & ocupados$eda<=9,"5 a 9",
+               ifelse(ocupados$eda>=10 & ocupados$eda<=13,"10 a 13",
+                ifelse(ocupados$eda>=14 & ocupados$eda<=17,"14 a 17","+17")))
+wtd.table(ocupados$edad,ocupados$sex,weights = ocupados$fac_mti,na.show = TRUE)
+
+wtd.table(ocupados$asis,ocupados$sex,weights = ocupados$fac_mti,na.show = TRUE)
+
+c<-wtd.table(ocupados$tam_hog,ocupados$sex,weights = ocupados$fac_mti,na.show = TRUE)
+write.csv(c,"C://Users//Sala-C23//Desktop//soloruralc.csv")
+
+wtd.table(ocupados$sex_jefe,weights = ocupados$fac_mti,na.show = TRUE)
+	
+  
+                    hombres   	mujeres   	total
+Pob de 5 a 17 años	4061217	   3800117	   7861334
+Tamaño de muestra	    9302	     8798     	18100
+Ocupados	           622492   	204970    	827462
+%ocupados     	0.153277207	0.053937813	0.105257199
+
+Caracteristicas individuales		
+5 a 9                	0          	0	           0
+10 a 13            	121416    	37279      	158695
+14 a 17	            501076    	167691	    668767
+Total	               622492	     204970	    827462
+			
+Según asistencia escolar			
+Asiste a la escuela	335572	    107060	     442632
+No asiste           286920	    97910	       384830
+total              	622492	    204970	     827462
+			
+Caracteristicas del hogar			
+1 a 3 integrantes  	55181	       25618	      80799
+4 a 5 integrantes	  149312	     44721	     194033
+6 a 7 intengrantes	65844     	21472       	87316
+8 y más	            35190     	8830	       44020
+total	              305527	    100641	     406168
+			
+sexo jefe del hogar			
+Hombre	327237		
+Mujer	78931		
+Total	406168		
