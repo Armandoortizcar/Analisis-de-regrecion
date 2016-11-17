@@ -26,11 +26,11 @@ write.csv(c,"C://Users//Sala-C23//Desktop//soloruralc.csv")
 wtd.table(ocupados$sex_jefe,weights = ocupados$fac_mti,na.show = TRUE)
 	
   
-                    hombres   	mujeres   	total
-Pob de 5 a 17 años	4061217	   3800117	   7861334
-Tamaño de muestra	    9302	     8798     	18100
-Ocupados	           622492   	204970    	827462
-%ocupados     	0.153277207	0.053937813	0.105257199
+                    hombres   	  mujeres   	 total
+Pob de 5 a 17 años	4061217	   3800117	  7861334
+Tamaño de muestra	 9302	     8798        18100
+Ocupados	         622492   204970    	 827462
+%ocupados     	   0.153277207   	0.053937813 	0.105257199
 
 Caracteristicas individuales		
 5 a 9                	0          	0	           0
