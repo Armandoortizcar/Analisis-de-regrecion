@@ -30,24 +30,24 @@ wtd.table(ocupados$sex_jefe,weights = ocupados$fac_mti,na.show = TRUE)
 Pob de 5 a 17 años	4061217	   3800117	  7861334
 Tamaño de muestra	 9302	     8798        18100
 Ocupados	         622492   204970    	 827462
-%ocupados     	   0.153277207   	0.053937813 	0.105257199
+%ocupados     	   0.153277207   0.053937813 	0.105257199
 
 Caracteristicas individuales		
 5 a 9                	0          	0	           0
 10 a 13            	121416    	37279      	158695
-14 a 17	            501076    	167691	    668767
-Total	               622492	     204970	    827462
+14 a 17	                501076    	167691	       668767
+Total	               622492	     204970	      827462
 			
 Según asistencia escolar			
 Asiste a la escuela	335572	    107060	     442632
-No asiste           286920	    97910	       384830
+No asiste              286920	     97910	      384830
 total              	622492	    204970	     827462
 			
 Caracteristicas del hogar			
 1 a 3 integrantes  	55181	       25618	      80799
-4 a 5 integrantes	  149312	     44721	     194033
+4 a 5 integrantes      149312	     44721	     194033
 6 a 7 intengrantes	65844     	21472       	87316
-8 y más	            35190     	8830	       44020
+8 y más	               35190     	8830	       44020
 total	              305527	    100641	     406168
 			
 sexo jefe del hogar			
