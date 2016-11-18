@@ -1,0 +1,60 @@
+setwd("C://Users//Sala-C23//Downloads")
+require(foreign)
+solorural<-data.frame(read.spss("solorural.sav"))
+require (questionr)
+ocupados<-subset(solorural,as.numeric(as.character(solorural$clase2))==1)
+
+ocupados1<-subset(solorural,solorural$c_ocu=="ocupado")
+
+ocupados1$eda<-as.numeric(as.character(ocupados1$eda))
+table(ocupados1$eda)
+ocupados1$edad<-ifelse(ocupados1$eda>=5 & ocupados1$eda<=9,"1",
+                      ifelse(ocupados1$eda>=10 & ocupados1$eda<=13,"2",
+                             ifelse(ocupados1$eda>=14 & ocupados1$eda<=17,"3","4")))
+table(ocupados1$edad)
+###############################################################################
+# t_per ~ sex +edad + asis + sex_jefe + escol_jefe + t_apo1 + ocu_jefe
+table(ocupados1$t_per)
+ocupados1<-subset(solorural,solorural$c_ocu=="ocupado")#   1    2    3    4 
+#1615  588   75    1 
+#  1=familiar 2=no familiar 3=cuenta propia 4=No espesif
+table(ocupados1$sex)
+#recodificar####
+install.packages("plyr")
+library(plyr)
+ocupados1$t_per<- revalue(factor(ocupados1$t_per),c("1"="familiar","2"="no familiar","3"= 
+                                                      "cuenta propia","4"=NA))
+ocupados1$eda1<- revalue(factor(ocupados1$edad),c("1"="5 a 9","2"="10 a 13","3"= 
+                                                      "14 a 17","4"=NA))
+table(ocupados1$eda1)
+table(ocupados1$t_per)
+table(ocupados1$t_apo1)
+table(ocupados1$escol_jefe)
+
+ocupados1$escol_jefe<- revalue(factor(ocupados1$escol_jefe),c("7"=NA))
+wtd.table(ocupados1$t_per,weights = ocupados1$fac_mti,na.show = TRUE)
+wtd.table(ocupados1$sex,weights = ocupados1$fac_mti,na.show = TRUE)
+wtd.table(ocupados1$edad,weights = ocupados1$fac_mti,na.show = TRUE)
+wtd.table(ocupados1$asis,weights = ocupados1$fac_mti,na.show = TRUE)
+wtd.table(ocupados1$sex_jefe,weights = ocupados1$fac_mti,na.show = TRUE)
+wtd.table(ocupados1$escol_jefe,weights = ocupados1$fac_mti,na.show = TRUE)
+wtd.table(ocupados1$t_apo1,weights = ocupados1$fac_mti,na.show = TRUE)
+wtd.table(ocupados1$ocu_jefe,weights = ocupados1$fac_mti,na.show = TRUE)
+
+# t_per ~ sex +eda1 + asis + sex_jefe + escol_jefe + t_apo1 + ocu_jefe
+library(nnet)
+mod1 <- multinom(t_per~1,data=ocupados1,trace=FALSE)
+summary(mod1)
+#Residual Deviance: 3215.723 
+#AIC: 3219.723 
+modfin<- multinom(t_per~sex+eda1+asis+sex_jefe+escol_jefe+t_apo1+ocu_jefe,data=ocupados1)
+g<- summary(modfin)
+print(g)
+#Residual Deviance: 1418.664 
+#AIC: 1482.664 
+######################TABLA EN LATEX#################################
+install.packages("stargazer")
+library(stargazer)
+help("stargazer")
+s<-stargazer(modfin,type = "text",title = "mlogit",digits =2,out="C:\\Users\\Sala-C23\\Desktop\\modfin.txt" )
+s<-stargazer(modfin,type = "text",title = "mlogit",digits =2,out="C://Users//Sala-C23//Desktop" )
